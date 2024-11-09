@@ -129,7 +129,7 @@ class ProdutosImagens(models.Model):
 class PedidoVenda(models.Model):
     STATUS_PEDIDO_CHOICE = (
        (1,'Pendente'),
-       (2,'Processando')
+       (2,'Processando'),
        (3,'Aguardando Pagamento'),
        (4,'Pagamento Realizado'),
        (5,'Em Separação'),
