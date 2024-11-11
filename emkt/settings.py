@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    #Custom Libs
+    "rest_framework",
+    
     #Custom App
     "apps.core.apps.CoreConfig",
     "apps.userauth.apps.UserauthConfig"

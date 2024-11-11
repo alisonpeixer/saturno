@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Models
-from .models import Produto, Categoria, Tags, Marca, Vendedor, ProdutosImagens, PedidoVenda, ItensPedidoVenda
+from .models import Produto, Categoria, Tags, Marca, Vendedor, ProdutoImagens, PedidoVenda, ItensPedidoVenda
 
 
 class ProdutoAdmin(admin.ModelAdmin):
@@ -14,13 +14,15 @@ class CategoriaAdmin(admin.ModelAdmin):
 class TagsAdmin(admin.ModelAdmin):
   list_display = ['tid', 'title']
 
+class MarcaAdmin(admin.ModelAdmin):
+  list_display = ['mid','title','get_marca_imagem']
 
 admin.site.register(Produto, ProdutoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Tags, TagsAdmin)
+admin.site.register(Marca,MarcaAdmin)
 admin.site.register(Vendedor)
-admin.site.register(Marca)
-admin.site.register(ProdutosImagens)
+admin.site.register(ProdutoImagens)
 
 admin.site.register(PedidoVenda),
 admin.site.register(ItensPedidoVenda)
