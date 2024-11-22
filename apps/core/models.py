@@ -79,7 +79,7 @@ class Produto(models.Model):
     categoria       = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
 
     title           = models.CharField(max_length=100)
-    image           = models.ImageField(upload_to='produto')
+    image           = models.ImageField(upload_to='produto',null=True,blank=True)
     descricao       = models.TextField(null=True,blank=True,default="")
     
     preco           = models.DecimalField(max_digits=9999999999999, decimal_places=2, default="0.00")
@@ -203,6 +203,7 @@ class PedidoVenda(models.Model):
     
     def __str__(self):
         return self.pvid
+    
 
 class ItensPedidoVenda(models.Model):
     STATUS_PRODUTO_CHOICE = (
@@ -213,9 +214,9 @@ class ItensPedidoVenda(models.Model):
         (5,'Fora de Linha')
     )
 
-    pvid            = models.ForeignKey(PedidoVenda,on_delete=models.CASCADE)
+    pvid            = models.ForeignKey(PedidoVenda,on_delete=models.CASCADE,related_name='itens',null=True,blank=True)
     item            = models.CharField(max_length=4,default="0000")
-    produto         = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True)
+    produto         = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True,related_name='produto')
     qtd             = models.DecimalField(default=0,decimal_places=2,max_digits=999999)
     status_produto  = models.CharField(choices=STATUS_PRODUTO_CHOICE,default=1,max_length=1)
     preco           = models.DecimalField(max_digits=9999999999999, decimal_places=2, default="0.00")
