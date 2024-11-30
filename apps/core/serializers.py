@@ -5,17 +5,29 @@ from rest_framework import serializers
 #Models
 from apps.core import models
 
-class ProdutoSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = models.Produto
-        fields = '__all__'
-
 class ProdutoImagensSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.ProdutoImagens
         fields = '__all__'
+
+
+class ProdutoSerializer(serializers.ModelSerializer):
+    produto_imagens = ProdutoImagensSerializer(many=True)
+    
+    class Meta:
+        model = models.Produto
+        fields = '__all__'
+
+    def create(self, validated_data):
+        produto_imagens_data = validated_data.pop('produto_imagens')
+        produto = models.Produto.objects.create(**validated_data)
+        
+        for img_data in produto_imagens_data:
+            models.ProdutoImagens.objects.create(produto=produto, **img_data)
+        
+        return produto
+
 
 
 class MarcaSerializer(serializers.ModelSerializer):
@@ -53,22 +65,24 @@ class ItensPedidoVendaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ItensPedidoVenda
-        fields = ['pvid','item','produto','qtd','status_produto','preco','preco_total']     
+        fields = '__all__'
 
 class PedidoVendaSerializer(serializers.ModelSerializer):
     itens = ItensPedidoVendaSerializer(many=True)
 
-
     class Meta:
         model = models.PedidoVenda
-        fields = ['id', 'pvid', 'user', 'cliente', 'valor_total', 'pago', 'status_pedido', 'itens', 'created_at']
+        fields = '__all__'
 
     def create(self, validated_data):
         itens_data = validated_data.pop('itens')
         pedido = models.PedidoVenda.objects.create(**validated_data)
         
+        # Salva os itens do pedido
+        item = 1
         for item_data in itens_data:
             item_data['pvid'] = pedido
+            item_data['item'] = f"{item:04}"
             models.ItensPedidoVenda.objects.create(**item_data)
-        
+            item += 1
         return pedido

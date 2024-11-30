@@ -111,8 +111,8 @@ class Produto(models.Model):
 
 
 class ProdutoImagens(models.Model):
-    imagens = models.ImageField(upload_to=produt_directory_path,blank=True,null=True)
-    produto = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True)
+    imagen = models.ImageField(upload_to=produt_directory_path,blank=True,null=True)
+    produto = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True, related_name='produto_imagens')
     created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
