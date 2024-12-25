@@ -7,25 +7,37 @@ from apps.core import models
 
 class ProdutoImagensSerializer(serializers.ModelSerializer):
     
+
     class Meta:
         model = models.ProdutoImagens
         fields = '__all__'
 
+class TagsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.Tags
+        fields = '__all__'
+            
 
 class ProdutoSerializer(serializers.ModelSerializer):
-    produto_imagens = ProdutoImagensSerializer(many=True)
+    tags = TagsSerializer(many=True, read_only=True)
+    produto_imagens = ProdutoImagensSerializer(many=True, required=False)
     
     class Meta:
         model = models.Produto
         fields = '__all__'
 
     def create(self, validated_data):
-        produto_imagens_data = validated_data.pop('produto_imagens')
+        tags = validated_data.pop('tags', [])  
+        produto_imagens_data = self.initial_data.pop('produto_imagens', [])
+
         produto = models.Produto.objects.create(**validated_data)
-        
+
+        produto.tags.set(tags)  
+
         for img_data in produto_imagens_data:
-            models.ProdutoImagens.objects.create(produto=produto, **img_data)
-        
+            models.ProdutoImagens.objects.create(produto=produto, imagen=img_data)
+
         return produto
 
 
@@ -42,12 +54,6 @@ class CategoriaSerializer(serializers.ModelSerializer):
         model = models.Categoria
         fields = '__all__'
     
-class TagsSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = models.Tags
-        fields = '__all__'
-            
 class ClienteSerializer(serializers.ModelSerializer):
     
     class Meta:

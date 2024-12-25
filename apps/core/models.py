@@ -9,7 +9,7 @@ from apps.userauth.models import User
 
 
 def produt_directory_path(instance,filename):
-    return 'produtos/produto_{0}/{1}'.format(instance.pid,filename)
+    return 'produtos/produto_{0}/{1}'.format(instance.produto.id,filename)
 
 def vendedor_directory_path(instance,filename):
     return 'vendedores/vendedor_{0}/{1}'.format(instance.vid,filename)

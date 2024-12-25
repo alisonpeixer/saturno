@@ -1,6 +1,10 @@
 #Libs
 from rest_framework import serializers
 
+# serializers.py
+from dj_rest_auth.serializers import UserDetailsSerializer
+
+
 
 # Models
 from .models import User
@@ -46,4 +50,14 @@ class UserSerializer(serializers.ModelSerializer):
               
                  
 
+
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+    class Meta:
+        model = User
+        fields = ['id','email','first_name','last_name','username','user_image','password','image']
+        extra_kwargs = {
+            'password': {'write_only': True,'required':False},
+            'email': {'write_only': True,'required':False},
+            'image': {'write_only': True},
+        }
 
