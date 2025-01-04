@@ -16,6 +16,7 @@ router.register('tags',views.TagsViews)
 router.register('cliente',views.ClienteViews)
 router.register('vendedor',views.VendedorViews)
 router.register('pedido-venda',views.PedidoVendaViews)
+router.register('carrinho',views.CarrinhoViews)
 
 
 urlpatterns = [

@@ -38,7 +38,7 @@ class User(AbstractUser):
 
 
     def get_user_image(self):
-        url_img = '/media/users/user_default/user_default.png'
+        url_img = '/users/user_default/user_default.png'
         
         if self.image and hasattr(self.image, 'url'):
             url_img = self.image.url
@@ -47,10 +47,10 @@ class User(AbstractUser):
 
     def user_image(self):
         
-        if self.image and hasattr(self.image, 'url') :
+        if self.image and hasattr(self.image, 'url'):
             return self.image.url
         
-        return '/media/users/user_default/user_default.png'
+        return '/users/user_default/user_default.png'
     
     def __str__(self):
         return self.username

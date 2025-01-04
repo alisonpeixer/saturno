@@ -13,11 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields= ['id','email','first_name','last_name','username','user_image','password','image']
+        fields= ['pk','email','first_name','last_name','username','user_image','password','image']
         extra_kwargs = {
             'password': {'write_only': True,'required':False},
-            'email': {'write_only': True,'required':False},
-            'image': {'write_only': True},
+            'email': {'write_only': False,'required':False}
         }
     
     def create(self, validated_data):
@@ -41,9 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
             
         instance.email = email
         instance.username = validated_data.get('username', instance.username)
-        instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
         instance.image = validated_data.get('image', instance.image)
-        instance.updated_at = validated_data.get('updated_at', instance.updated_at)
+        instance.first_name = validated_data.get('first_name', instance.first_name).upper()
+        instance.last_name = validated_data.get('last_name', instance.last_name).upper()
 
         instance.save()
         return instance
@@ -54,10 +53,9 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta:
         model = User
-        fields = ['id','email','first_name','last_name','username','user_image','password','image']
+        fields = ['pk','email','first_name','last_name','username','password','image']
         extra_kwargs = {
             'password': {'write_only': True,'required':False},
-            'email': {'write_only': True,'required':False},
-            'image': {'write_only': True},
+            'email': {'write_only': False,'required':False}
         }
 

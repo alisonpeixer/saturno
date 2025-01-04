@@ -171,22 +171,36 @@ class Vendedor(models.Model):
 
     def __str__(self):
         return self.nome
-    
+
+
 
 # ==================================== PEDIDO DE VENDA ===================================================== #
 
+class Carrinho(models.Model):
+    crid        = ShortUUIDField(unique=True,length=10,max_length=20,prefix='cr',alphabet='abcdefgh1234567')
+    user        = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True,related_name='user')
+    produto     = models.ForeignKey(Produto,on_delete=models.CASCADE,related_name='cartproduto')
+    qtd         = models.DecimalField(default=0,decimal_places=2,max_digits=999999)
+    created_at  = models.DateField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = 'Carinhos'
+    
+    def __str__(self):
+        return self.crid
+    
 class PedidoVenda(models.Model):
     STATUS_PEDIDO_CHOICE = (
-       (1,'Pendente'),
-       (2,'Processando'),
-       (3,'Aguardando Pagamento'),
-       (4,'Pagamento Realizado'),
-       (5,'Em Separação'),
-       (6,'Aguardando a Coleta'),
-       (7,'Em Transporte'),
-       (8,'Entregue'),
-       (9,'Finalizado'),
-       (0,'Cancelado')
+       ('1','Pendente'),
+       ('2','Processando'),
+       ('3','Aguardando Pagamento'),
+       ('4','Pagamento Realizado'),
+       ('5','Em Separação'),
+       ('6','Aguardando a Coleta'),
+       ('7','Em Transporte'),
+       ('8','Entregue'),
+       ('9','Finalizado'),
+       ('0','Cancelado')
     )
 
     pvid            = ShortUUIDField(unique=True,length=10,max_length=20,prefix="pv",alphabet="abcdefgh1234567")
@@ -216,7 +230,7 @@ class ItensPedidoVenda(models.Model):
 
     pvid            = models.ForeignKey(PedidoVenda,on_delete=models.CASCADE,related_name='itens',null=True,blank=True)
     item            = models.CharField(max_length=4,default="0000")
-    produto         = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True,related_name='produto')
+    produto         = models.ForeignKey(Produto,on_delete=models.SET_NULL,null=True,related_name='pdvproduto')
     qtd             = models.DecimalField(default=0,decimal_places=2,max_digits=999999)
     status_produto  = models.CharField(choices=STATUS_PRODUTO_CHOICE,default=1,max_length=1)
     preco           = models.DecimalField(max_digits=9999999999999, decimal_places=2, default="0.00")

@@ -8,3 +8,12 @@ setuptools==69.0.3
 shortuuid==1.0.13
 smmap==5.0.1
 sqlparse==0.5.1
+
+dj-rest-auth==7.0.0
+djangorestframework-simplejwt==5.3.1
+PyJWT==2.10.1
+tzdata==2024.2
+## The following requirements were added by pip freeze:
+django-cors-headers==4.6.0
+## The following requirements were added by pip freeze:
+django-filter==24.3

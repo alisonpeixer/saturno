@@ -21,24 +21,11 @@ class TagsSerializer(serializers.ModelSerializer):
 
 class ProdutoSerializer(serializers.ModelSerializer):
     tags = TagsSerializer(many=True, read_only=True)
-    produto_imagens = ProdutoImagensSerializer(many=True, required=False)
+    produto_imagens = ProdutoImagensSerializer(many=True, required=False, read_only=True)
     
     class Meta:
         model = models.Produto
         fields = '__all__'
-
-    def create(self, validated_data):
-        tags = validated_data.pop('tags', [])  
-        produto_imagens_data = self.initial_data.pop('produto_imagens', [])
-
-        produto = models.Produto.objects.create(**validated_data)
-
-        produto.tags.set(tags)  
-
-        for img_data in produto_imagens_data:
-            models.ProdutoImagens.objects.create(produto=produto, imagen=img_data)
-
-        return produto
 
 
 
@@ -74,21 +61,24 @@ class ItensPedidoVendaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PedidoVendaSerializer(serializers.ModelSerializer):
-    itens = ItensPedidoVendaSerializer(many=True)
+    itens = ItensPedidoVendaSerializer(many=True,read_only=True)
 
     class Meta:
         model = models.PedidoVenda
         fields = '__all__'
-
-    def create(self, validated_data):
-        itens_data = validated_data.pop('itens')
-        pedido = models.PedidoVenda.objects.create(**validated_data)
         
-        # Salva os itens do pedido
-        item = 1
-        for item_data in itens_data:
-            item_data['pvid'] = pedido
-            item_data['item'] = f"{item:04}"
-            models.ItensPedidoVenda.objects.create(**item_data)
-            item += 1
-        return pedido
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['desc_status_pedido'] = instance.get_status_pedido_display()
+        return rep
+    
+        
+class CarrinhoSerializer(serializers.ModelSerializer):
+    produto = ProdutoSerializer(read_only=True)  # pegando os dados do produto
+
+    class Meta:
+        model = models.Carrinho
+        fields = '__all__'
+    
+
+        
