@@ -184,3 +184,7 @@ AUTH_USER_MODEL = 'userauth.User'
 #Config cors
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+
+# forcando o retorno em HTTPS dos itens.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
